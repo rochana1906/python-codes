@@ -1,21 +1,18 @@
-from docx import Document
-PLACEHOLDER="[name]"
+import pandas
 
-with open ("./Input/Names/invited_names.txt") as name_file:
-    names= name_file.readlines()
-    print(names)
+data=pandas.read_csv("2018_Central_Park_Squirrel_Census_-_Squirrel_Data.csv")
+grey_count= len(data[data["Primary Fur Color"] == "Gray"])
+Cinnamon_count= len(data[data["Primary Fur Color"] == "Cinnamon"])
+Black_count= len(data[data["Primary Fur Color"] == "Black"])
+print(grey_count)
+print(Cinnamon_count)
+print(Black_count)
 
-with open ("./Input/Letters/starting_letter.txt") as letter_file:
-    letter_contents=letter_file.read()
-    for name in names:
-        stripped_name = name.strip()
-        new_letter = letter_contents.replace(PLACEHOLDER, stripped_name)
-        print(new_letter)
+data_dict={
+      "Fur Color": ["gray","Cinnamon","Black"],
+       "Count": [grey_count,Cinnamon_count,Black_count]
 
-        document = Document()
-        document.add_paragraph(new_letter)
+}
 
-        document.save(f"./Output/ReadyToSend/letter_for_{stripped_name}.docx")
-
-
-
+df=pandas.DataFrame(data_dict)
+df.to_csv("squirrel_count.csv")
